@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Welcome!</title>
+    <style type="text/css">
+      html, body{
+      	margin: 0;
+      	padding: 0;
+      	height: 100%;
+      }
+      #wrapper{
+      	min-width: 1080px;
+      	height: 100%;
+      }
+      .preface{
+      	display: table;
+      	background-color: #111;
+      	color: #fff;
+      	font-family: Helvetica, "Microsoft Yahei";
+      	width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="wrapper" :class="style">
+      <template v-if="preface === true"><preface @start="change()"></template>
+      <template v-else>Content</template>
+    </div>
+    <script src="/dist/build.js"></script>
+  </body>
+</html>
