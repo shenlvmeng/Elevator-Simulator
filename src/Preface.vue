@@ -60,7 +60,7 @@ export default {
     text-align: center;
     font-size: 40px;
   }
-  input[type="text"]{
+  #app input[type="text"]{
     color: #fff;
     background-color: #111;
     max-width: 2em;

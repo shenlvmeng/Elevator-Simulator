@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Pre from './Preface.vue'
-//import Door from './DoorBody.vue' //just for test
+//import Door from './Door.vue' //just for test
 
 new Vue({
   el: "#wrapper",
@@ -15,7 +15,7 @@ new Vue({
   	}
   },
   components: {
-  	preface: Pre
+  	Preface: Pre
   }
 });
 
@@ -26,6 +26,6 @@ new Vue({
 // 	  flag: false
 // 	},
 // 	components: {
-// 	  door: Door
+// 	  Door: Door
 // 	}
 // })
