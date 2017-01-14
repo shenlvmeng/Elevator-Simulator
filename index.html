@@ -24,7 +24,7 @@
   </head>
   <body>
     <div id="wrapper" :class="style">
-      <template v-if="preface === true"><Preface @start="change()"></template>
+      <template v-if="preface === true"><Preface @start="change"></template>
       <template v-else>Content</template>
     </div>
     <script src="/dist/build.js"></script>

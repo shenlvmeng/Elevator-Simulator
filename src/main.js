@@ -6,12 +6,14 @@ new Vue({
   el: "#wrapper",
   data:{
   	preface: true,
-  	style: "preface"
+  	style: "preface",
+    floor: 10
   },
   methods: {
-  	change () {
+  	change (floor) {
   	  this.preface = false;
   	  this.style = 'content';
+      this.floor = floor;
   	}
   },
   components: {

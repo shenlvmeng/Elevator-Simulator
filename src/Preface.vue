@@ -29,7 +29,7 @@ export default {
         this.floor = 0;
         return;
       }
-      this.$emit('start');
+      this.$emit('start', this.floor);
     }
   },
   computed: {
