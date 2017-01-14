@@ -4,10 +4,7 @@
   	  <input type="text" :value="floor" @input="update($event.target.value)">
   	  <span>{{floorName}}</span>
   	</p>
-  	<div id="door-body">
-  	  <DoorBody id="left-door">
-  	  <DoorBody id="right-door">
-  	</div>
+  	<DoorBody :isopen="isarrived">
   	<aside id="buttons">
   	  <div class="circle" v-if="floor < maxFloor"><span id="up-triangle" :class="{active: !isPushable}"></span></div>
   	  <div class="circle" v-if="floor > 1"><span id="down-triangle"></span></div>
@@ -22,12 +19,12 @@
   	name: 'door',
   	data () {
   		floor: 1,
-  		maxFloor: this.maxBuildingFloor,
-  		isPushable: !this.isArrived,
+  		maxFloor: this.maxbuildingfloor,
+  		isPushable: !this.isarrived,
   		up:    false,
   		down:  false
   	},
-  	props: ['maxBuildingFloor', 'isArrived'],
+  	props: ['maxbuildingfloor', 'isarrived'],
   	methods: {
   	  //People on the 'floor'th floor send up command
   	  up () {
@@ -103,10 +100,6 @@
   	border: 3px solid #999;
   	border-radius: 5px;
 
-  }
-  #door-body{
-  	background-color: ivory;
-  	width: 100%;
   }
   #left-door{
   	float: left;

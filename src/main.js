@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Pre from './Preface.vue'
+//import Door from './DoorBody.vue' //just for test
 
 new Vue({
   el: "#wrapper",
@@ -17,3 +18,14 @@ new Vue({
   	preface: Pre
   }
 });
+
+//下面供测试
+// new Vue({
+// 	el: "#test",
+// 	data: {
+// 	  flag: false
+// 	},
+// 	components: {
+// 	  door: Door
+// 	}
+// })
