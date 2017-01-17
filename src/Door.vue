@@ -12,7 +12,7 @@
   	    <div class="circle" v-if="floor > 1" @click="down()"><div id="down-triangle" :class="{active: isDown && isPushable}"></div></div>
   	  </transition>
   	</aside>
-  	<DoorBody :isopen="isarrived">
+  	<DoorBody :isopen="pos == floor">
   </div>
 </template>
 
@@ -26,37 +26,32 @@
   		floor: 1,
   		step: Math.ceil(this.maxbuildingfloor / 10),
   		maxFloor: this.maxbuildingfloor,
-  		isPushable: !this.isarrived,
-  		//whether up button is pushed
-  		isUp: false,
-  		//whether down button is pushed
-  		isDown: false
+      //whether the elevator has arrvied
+  		isPushable: this.pos != this.floor || (this.upList.length == 0 && this.downList.length == 0)
   	  }
   	},
-  	props: ['maxbuildingfloor', 'isarrived'],
+    //`pos`, `toup` and `todown` are calculated from list sended from Control component
+  	props: ['maxbuildingfloor', 'pos', 'toup', 'todown'],
   	methods: {
   	  //People on the 'floor'th floor send up command
   	  up () {
   	  	if (!this.isUp && this.isPushable) {
-  	  	  this.isUp = true;
   	  	  this.$emit('up', this.floor);
   	  	}
   	  },
       //People on the 'floor'th floor send down command
   	  down () {
   	  	if (!this.isDown && this.isPushable) {
-  	  	  this.isDown = true;
   	  	  this.$emit('down', this.floor);
   	  	}
   	  },
   	  //verify floor
   	  update (value) {
-  		value = parseInt(value);
-	    if (!isNaN(value) && Number.isInteger(value) && value > 0 && value <= this.maxFloor) {
-	      this.floor = value;
-	    }
-	    this.$refs.input.value = this.floor;
-	    this.$emit('floorChange', this.floor);
+  		  value = parseInt(value);
+	      if (!isNaN(value) && Number.isInteger(value) && value > 0 && value <= this.maxFloor) {
+	        this.floor = value;
+	      }
+	      this.$refs.input.value = this.floor;
    	  }
   	},
   	computed: {
@@ -70,7 +65,13 @@
   		  suffix = 'rd';
   		}
   		return suffix + ' F';
-  	  }
+  	  },
+      isUp () {
+        return !(this.upList.indexOf(this.floor) == -1);
+      },
+      isDown () {
+        return !(this.downList.indexOf(this.floor) == -1);
+      }
   	},
   	components: {
   	  DoorBody: DoorBody

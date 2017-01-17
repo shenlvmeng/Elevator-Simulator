@@ -1,12 +1,16 @@
 <template>
   <div id="content">
-    <Door :maxbuildingfloor="maxFloor" :isarrived="arr1">
-    <Door :maxbuildingfloor="maxFloor" :isarrived="arr2">
-   </div>
+    <Door :maxbuildingfloor="maxFloor" :pos="positions[0]" :toup="upList" :todown="downList" @up="up" @down="down">
+    <Door :maxbuildingfloor="maxFloor" :pos="positions[1]" :toup="upList" :todown="downList" @up="up" @down="down">
+    <div id="well" ref="well">
+      <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :key="index" @floorchange="update">
+    </div>
+  </div>
 </template>
 
 <script>
-  import Door from './Door.vue'
+  import Door from './Door.vue';
+  import Elevator from './Elevator.vue';
 
   export default {
   	name: 'control',
@@ -15,27 +19,95 @@
   	  //Assume that all elevators start from 1st floor
   	  positions: [1, 1],
   	  //store directions of all elevators
-  	  //0 for up, 1 for down
+  	  //0 for still, 1 for up, 2 for down
   	  directions: [0, 0],
-  	  //store two door floors
-  	  floors: [1, 1]
   	  //max floor of this building
-  	  maxFloor: this.floor
+  	  maxFloor: this.floor,
+  	  //floor list waiting for up
+  	  upList: [],
+  	  //floor list waiting for down
+  	  downList: [],
+  	  //elevator new tasks
+  	  newTasks: [{}, {}],
+  	  //height of DOM div#well
+  	  height: this.$refs.well.clientHeight;
   	},
   	methods: {
-
-  	},
-  	computed: {
-  	  isarr1 () {
-  	  	return this.positions[0] === this.floor[0];
+  	//listen to `up` event from elevator door
+  	  up (floor) {
+  	  	if (this.upList.indexOf(floor) == -1) {
+  	  	  this.upList.push(floor);
+  	  	  this.allocate(floor, 1);
+  	  	}
   	  },
-  	  isarr2 () {
-  	  	return this.positions[1] === this.floor[1];
+  	//listen to `down` event from elevator door
+  	  down (floor) {
+  	  	if (this.upList.indexOf(floor) == -1) {
+  	  	  this.downList.push(floor);
+  	  	  this.allocate(floor, 2);
+  	  	}
+  	  },
+  	//allocate elevator tasks
+  	  allocate (f, d) {
+  	  	//Notice: Assume that elevator 1 has higher priority
+  	  	let dst = f,
+  	  		d1 = this.directions[0],
+  	  		d2 = this.directions[1],
+  	  		p1 = this.positions[0],
+  	  		p2 = this.positions[1];
+  	  	//allocate tasks
+  	  	//3 conditions: pick up; still; different directions
+  	  	//pick up or still
+  	  	if (d1 == 0 || (d1 == 1 && p1 < dst) || (d1 == 2 && p1 > dst)) {
+  	  	  if (d2 == 0 || (d2 == 1 && p2 < dst) || (d2 == 2 && p2 > dst)) {
+  	  	  	if (Math.abs(p1 - dst) > Math.abs(p2 - dst)) {
+  	  	  	  this.newTasks[1] = {t: dst, d: d};
+  	  	  	  return;
+  	  	  	}
+  	  	  }
+  	  	  this.newTasks[0] = {t: dst, d: d};
+  	  	//different directions
+  	  	} else {
+  	  	  if ((d2 == 1 && p2 < dst) || (d2 == 2 && p2 > dst)) {
+  	  		this.newTasks[1] = {t: dst, d: d};
+  	  	  } else {
+  	  		if (Math.abs(p1 - dst) > Math.abs(p2 - dst)) {
+  	  		  this.newTasks[1] = {t: dst, d: d};
+  	  		} else {
+  	  		  this.newTasks[0] = {t: dst, d: d};
+  	  		}
+  	  	  }
+  	  	}
+  	  },
+  	//update positions and directions together with uplist and downlist
+  	  update (pos, dir, key) {
+  	  	this.positions[key] = pos;
+  	  	this.directions[key] = dir;
+  	  	if (dir == 1 && (let p = this.upList.indexOf(pos), p != -1)) {
+  	  	  this.upList.splice(p, -1);
+  	  	} else if (dir == 2 && (let p = this.downList.indexOf(pos), p != -1)) {
+  	  	  this.downList.splice(p, -1);
+  	  	}
   	  }
+  	},
+  	components: {
+  	  Door: Door,
+  	  Elevator: Elevator
   	}
   }
 </script>
 
 <style>
-
+  #content{
+  	width: 100%;
+  }
+  #well{
+  	width: 100px;
+  	height: 100%;
+  	min-height: 600px;
+  	display: relative;
+  	float: right;
+  	border: 1px solid #333;
+  	padding: 0 2px;
+  }
 </style>
