@@ -5,6 +5,10 @@
     <div id="well" ref="well">
       <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :key="index" @floorchange="update">
     </div>
+    <div id="panel">
+      <select @change="changeKey($event)"><option v-for="id in ids" :value="id">电梯 {{id}}</option></select>
+  	  <input type="number" :step="step" ref="panelinput" :value="dstFloor" @input="updateFloor($event.target.value)" @keyup.enter="addDst">
+    </div>
   </div>
 </template>
 
@@ -15,6 +19,16 @@
   export default {
   	name: 'control',
   	data: {
+  	  //elevator ID
+  	  //just for v-for
+  	  ids: [0, 1],
+  	  //active elevator ID
+  	  //for <select>
+  	  activeID: 0,
+  	  //temporary floor input from panel
+  	  dstFloor: 1,
+  	  //step value for <input> in panel
+  	  step: Math.ceil(this.floor / 10),
   	  //store positions of all elevators
   	  //Assume that all elevators start from 1st floor
   	  positions: [1, 1],
@@ -88,6 +102,23 @@
   	  	} else if (dir == 2 && (let p = this.downList.indexOf(pos), p != -1)) {
   	  	  this.downList.splice(p, -1);
   	  	}
+  	  },
+  	//update floor destination input from elevator panel
+  	  updateFloor (value) {
+  		value = parseInt(value);
+	    if (!isNaN(value) && Number.isInteger(value) && value > 0 && value <= this.maxFloor) {
+	      this.dstFloor = value;
+	    }
+        this.$refs.panelinput.value = this.dstFloor;
+  	  }
+  	//switch panel ownership
+  	  changeKey (event) {
+  	  	this.activeID = event.target.value;
+  	  }
+  	//add floor input from panel input
+  	  addDst () {
+  	  	let n = {t: this.dstFloor, d: 0};
+  	  	this.newTasks = n;
   	  }
   	},
   	components: {
@@ -109,5 +140,8 @@
   	float: right;
   	border: 1px solid #333;
   	padding: 0 2px;
+  }
+  #panel{
+  	position: fixed;
   }
 </style>

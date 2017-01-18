@@ -4,7 +4,7 @@
   	  <input type="number" :step="step" ref="input" :value="floor" @input="update($event.target.value)">
   	  <span>{{floorName}}</span>
   	</p>
-  	  <aside id="buttons">
+  	<aside id="buttons">
   	  <transition>
   	    <div class="circle" v-if="floor < maxFloor" @click="up()"><div id="up-triangle" :class="{active: isUp && isPushable}"></div></div>
   	  </transition>
@@ -12,7 +12,7 @@
   	    <div class="circle" v-if="floor > 1" @click="down()"><div id="down-triangle" :class="{active: isDown && isPushable}"></div></div>
   	  </transition>
   	</aside>
-  	<DoorBody :isopen="pos == floor">
+  	<DoorBody :isopen="pos == floor && (isUp || isDown)">
   </div>
 </template>
 
