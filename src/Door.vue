@@ -23,11 +23,11 @@
   	name: 'door',
   	data () {
   	  return {
-  		floor: 1,
-  		step: Math.ceil(this.maxbuildingfloor / 10),
-  		maxFloor: this.maxbuildingfloor,
-      //whether the elevator has arrvied
-  		isPushable: this.pos != this.floor || (this.upList.length == 0 && this.downList.length == 0)
+  		  floor: 1,
+  		  step: Math.ceil(this.maxbuildingfloor / 10),
+  		  maxFloor: this.maxbuildingfloor,
+        //whether the elevator has arrvied
+  		  isPushable: this.pos != this.floor || (this.toup.length == 0 && this.todown.length == 0)
   	  }
   	},
     //`pos`, `toup` and `todown` are calculated from list sended from Control component
@@ -67,10 +67,10 @@
   		return suffix + ' F';
   	  },
       isUp () {
-        return !(this.upList.indexOf(this.floor) == -1);
+        return !(this.toup.indexOf(this.floor) == -1);
       },
       isDown () {
-        return !(this.downList.indexOf(this.floor) == -1);
+        return !(this.todown.indexOf(this.floor) == -1);
       }
   	},
   	components: {
@@ -81,10 +81,11 @@
 
 <style>
   #door{
-  	width: 300px;
-  	height: 840px;
-  	margin: auto 0;
-  	float: left;
+  	width: 500px;
+  	height: 590px;
+  	margin: auto 10px;
+    position: relative;
+    display: inline-block;
   }
   #door p{
   	margin: 0;
@@ -112,6 +113,7 @@
   	background: grey;
   	border: 3px solid #999;
   	border-radius: 5px;
+    z-index: 10;
 
   }
   .v-enter-active, .v-leave-active{

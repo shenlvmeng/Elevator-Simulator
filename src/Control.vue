@@ -1,9 +1,10 @@
 <template>
   <div id="content">
-    <Door :maxbuildingfloor="maxFloor" :pos="positions[0]" :toup="upList" :todown="downList" @up="up" @down="down">
-    <Door :maxbuildingfloor="maxFloor" :pos="positions[1]" :toup="upList" :todown="downList" @up="up" @down="down">
+    <div v-for="i in [0,1]" class="door">
+      <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :toup="upList" :todown="downList" @up="up" @down="down">
+    </div>
     <div id="well" ref="well">
-      <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :key="index" @floorchange="update">
+      <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :id="index" @floorchange="update">
     </div>
     <div id="panel">
       <select @change="changeKey($event)"><option v-for="id in ids" :value="id">电梯 {{id}}</option></select>
@@ -18,34 +19,46 @@
 
   export default {
   	name: 'control',
-  	data: {
-  	  //elevator ID
-  	  //just for v-for
-  	  ids: [0, 1],
-  	  //active elevator ID
-  	  //for <select>
-  	  activeID: 0,
-  	  //temporary floor input from panel
-  	  dstFloor: 1,
-  	  //step value for <input> in panel
-  	  step: Math.ceil(this.floor / 10),
-  	  //store positions of all elevators
-  	  //Assume that all elevators start from 1st floor
-  	  positions: [1, 1],
-  	  //store directions of all elevators
-  	  //0 for still, 1 for up, 2 for down
-  	  directions: [0, 0],
-  	  //max floor of this building
-  	  maxFloor: this.floor,
-  	  //floor list waiting for up
-  	  upList: [],
-  	  //floor list waiting for down
-  	  downList: [],
-  	  //elevator new tasks
-  	  newTasks: [{}, {}],
-  	  //height of DOM div#well
-  	  height: this.$refs.well.clientHeight;
+  	data () {
+      return {
+    	  //elevator ID
+    	  //just for v-for
+    	  ids: [0, 1],
+    	  //active elevator ID
+    	  //for <select>
+    	  activeID: 0,
+    	  //temporary floor input from panel
+    	  dstFloor: 1,
+    	  //step value for <input> in panel
+    	  step: Math.ceil(this.floor / 10),
+    	  //store positions of all elevators
+    	  //Assume that all elevators start from 1st floor
+    	  positions: [1, 1],
+    	  //store directions of all elevators
+    	  //0 for still, 1 for up, 2 for down
+    	  directions: [0, 0],
+    	  //max floor of this building
+    	  maxFloor: this.floor,
+    	  //floor list waiting for up
+    	  upList: [],
+    	  //floor list waiting for down
+    	  downList: [],
+    	  //elevator new tasks
+    	  newTasks: [{}, {}],
+    	  //height of DOM div#well
+    	  height: 0
+      }
   	},
+    props: {
+      floor: {
+        require: true
+      }
+    },
+    mounted () {
+      this.$nextTick(function(){
+        this.height = this.$el.clientHeight;
+      });
+    },
   	methods: {
   	//listen to `up` event from elevator door
   	  up (floor) {
@@ -97,24 +110,25 @@
   	  update (pos, dir, key) {
   	  	this.positions[key] = pos;
   	  	this.directions[key] = dir;
-  	  	if (dir == 1 && (let p = this.upList.indexOf(pos), p != -1)) {
+        let p;
+  	  	if (dir == 1 && (p = this.upList.indexOf(pos), p != -1)) {
   	  	  this.upList.splice(p, -1);
-  	  	} else if (dir == 2 && (let p = this.downList.indexOf(pos), p != -1)) {
+  	  	} else if (dir == 2 && (p = this.downList.indexOf(pos), p != -1)) {
   	  	  this.downList.splice(p, -1);
   	  	}
   	  },
   	//update floor destination input from elevator panel
   	  updateFloor (value) {
-  		value = parseInt(value);
-	    if (!isNaN(value) && Number.isInteger(value) && value > 0 && value <= this.maxFloor) {
-	      this.dstFloor = value;
-	    }
+  		  value = parseInt(value);
+	      if (!isNaN(value) && Number.isInteger(value) && value > 0 && value <= this.maxFloor) {
+	        this.dstFloor = value;
+	      }
         this.$refs.panelinput.value = this.dstFloor;
-  	  }
+  	  },
   	//switch panel ownership
   	  changeKey (event) {
   	  	this.activeID = event.target.value;
-  	  }
+  	  },
   	//add floor input from panel input
   	  addDst () {
   	  	let n = {t: this.dstFloor, d: 0};
@@ -131,17 +145,22 @@
 <style>
   #content{
   	width: 100%;
+    position: relative;
+    padding-left: 50px;
   }
   #well{
   	width: 100px;
   	height: 100%;
   	min-height: 600px;
-  	display: relative;
+  	position: relative;
   	float: right;
   	border: 1px solid #333;
   	padding: 0 2px;
   }
   #panel{
   	position: fixed;
+  }
+  div.door{
+    display: inline-block;
   }
 </style>

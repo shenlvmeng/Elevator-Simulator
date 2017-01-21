@@ -1,5 +1,5 @@
 <template>
-  <div id="elevator" :style="elevatorStyle"></div>
+  <div id="elevator" :style="{height: (height / floors) + 'px', bottom: (pos * height / floors) + 'px', left: (3 + id * 52) + 'px'}"></div>
 </template>
 
 <script>
@@ -11,20 +11,17 @@
   	  	pos: 1,
   	  	//togo list
   	  	tasks: [],
-		//direction
-		//0 for still, 1 for up, 2 for down
-		dir: 0,
-		//listen to change of newtasks
-		tmpTask: this.newtask,
-		//style of a single elevator
-  	  	elevatorStyle: {
-  	  	  height: (this.height / this.floors) + 'px',
-  	  	  top: ((pos - 1) * this.height / this.floors) + 'px',
-  	  	  left: (this.key * 52) + 'px'
-  	  	}
+		    //direction
+		    //0 for still, 1 for up, 2 for down
+		    dir: 0,
+		    //listen to change of newtasks
+		    tmpTask: this.newtask
   	  }
   	},
-  	props: ['floors', 'newtask', 'height', 'key'],
+  	props: ['floors', 'newtask', 'height', 'id'],
+    created () {
+      this.pos = 1;
+    },
   	methods: {
   	//recursively move to next destination until tasks list is empty
   	  move () {
@@ -35,21 +32,30 @@
   	  	let next = this.tasks[0].t;
   	  	if (this.pos == next) {
   	  	  this.tasks.shift();
-  	  	  this.$emit('floorchange', this.pos, 0, this.key);
+  	  	  this.$emit('floorchange', this.pos, 0, this.id);
   	  	  setTimeOut(this.move, 800);
   	  	} else if (this.pos > next) {
   	      this.dir = 2;
   	      this.pos--;
-  	      this.$emit('floorchange', this.pos, 2, this.key);
+  	      this.$emit('floorchange', this.pos, 2, this.id);
   	      setTimeOut(this.move, 100);
   	  	} else if (this.pos < next) {
   	  	  this.dir = 1;
   	  	  this.pos++;
-  	  	  this.$emit('floorchange', this.pos, 1, this.key);
+  	  	  this.$emit('floorchange', this.pos, 1, this.id);
   	  	  setTimeOut(this.move, 100);
   	  	}
   	  }
-  	}
+  	},
+    computed: {
+      // //style of a single elevator
+      // Unknown reason for not working
+      // elevatorStyle: {
+      //   height: (this.height / this.floors) + 'px',
+      //   bottom: (this.pos * this.height / this.floors) + 'px',
+      //   left: (0 + this.id * 52) + 'px'
+      // }
+    },
   	watch: {
   	//put new task into correct list position
   	//call move function when insert into empty tasks list
@@ -105,7 +111,7 @@
 
 <style>
   #elevator{
-  	display: absolute;
+  	position: absolute;
   	width: 45px;
   	border: 1px solid steelblue;
   	transition: top .5s;

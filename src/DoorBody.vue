@@ -34,7 +34,7 @@
   	transform: translateX(20px);
   	opacity: 0;
   }
-  #door{
+  svg#door{
   	background-color: ivory;
   	width: 100%;
   	height: 100%;

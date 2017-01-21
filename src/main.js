@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Pre from './Preface.vue'
+import Control from './Control.vue'
 //import Door from './Door.vue' //just for test
 
 new Vue({
@@ -17,7 +18,8 @@ new Vue({
   	}
   },
   components: {
-  	Preface: Pre
+  	Preface: Pre,
+    Elevator: Control
   }
 });
 

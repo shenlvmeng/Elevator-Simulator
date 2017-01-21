@@ -20,12 +20,16 @@
       	font-family: Helvetica, "Microsoft Yahei";
       	width: 100%;
       }
+      .content{
+        width: 100%;
+        font-family: Helvetica, "Microsoft Yahei";
+      }
     </style>
   </head>
   <body>
     <div id="wrapper" :class="style">
       <template v-if="preface === true"><Preface @start="change"></template>
-      <template v-else>Content</template>
+      <template v-else><Elevator :floor="floor"></template>
     </div>
     <script src="/dist/build.js"></script>
   </body>
