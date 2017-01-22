@@ -3,7 +3,7 @@
     <div v-for="i in [0,1]" class="door">
       <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :toup="upList" :todown="downList" @up="up" @down="down">
     </div>
-    <div id="well" ref="well">
+    <div id="well" ref="well" :style="{height: height + 'px'}">
       <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :id="index" @floorchange="update">
     </div>
     <div id="panel">
@@ -69,7 +69,7 @@
   	  },
   	//listen to `down` event from elevator door
   	  down (floor) {
-  	  	if (this.upList.indexOf(floor) == -1) {
+  	  	if (this.downList.indexOf(floor) == -1) {
   	  	  this.downList.push(floor);
   	  	  this.allocate(floor, 2);
   	  	}
@@ -111,10 +111,10 @@
   	  	this.positions[key] = pos;
   	  	this.directions[key] = dir;
         let p;
-  	  	if (dir == 1 && (p = this.upList.indexOf(pos), p != -1)) {
-  	  	  this.upList.splice(p, -1);
-  	  	} else if (dir == 2 && (p = this.downList.indexOf(pos), p != -1)) {
-  	  	  this.downList.splice(p, -1);
+  	  	if (dir <= 1 && (p = this.upList.indexOf(pos), p != -1)) {
+  	  	  setTimeout(this.upList.splice(p, 1), 1300);
+  	  	} else if (dir != 1 && (p = this.downList.indexOf(pos), p != -1)) {
+  	  	  setTimeout(this.downList.splice(p, 1), 1300);
   	  	}
   	  },
   	//update floor destination input from elevator panel
@@ -146,7 +146,6 @@
   #content{
   	width: 100%;
     position: relative;
-    padding-left: 50px;
   }
   #well{
   	width: 100px;
@@ -158,9 +157,10 @@
   	padding: 0 2px;
   }
   #panel{
-  	position: fixed;
+  	position: absolute;
   }
   div.door{
     display: inline-block;
+    margin-left: 50px;
   }
 </style>

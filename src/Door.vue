@@ -83,7 +83,6 @@
   #door{
   	width: 500px;
   	height: 590px;
-  	margin: auto 10px;
     position: relative;
     display: inline-block;
   }

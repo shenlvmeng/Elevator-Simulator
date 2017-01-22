@@ -1,5 +1,5 @@
 <template>
-  <div id="elevator" :style="{height: (height / floors) + 'px', bottom: (pos * height / floors) + 'px', left: (3 + id * 52) + 'px'}"></div>
+  <div id="elevator" :style="{height: (height / floors) + 'px', bottom: ((pos-1) * height / floors) + 'px', left: (3 + id * 52) + 'px'}">{{pos}}</div>
 </template>
 
 <script>
@@ -13,9 +13,7 @@
   	  	tasks: [],
 		    //direction
 		    //0 for still, 1 for up, 2 for down
-		    dir: 0,
-		    //listen to change of newtasks
-		    tmpTask: this.newtask
+		    dir: 0
   	  }
   	},
   	props: ['floors', 'newtask', 'height', 'id'],
@@ -33,17 +31,17 @@
   	  	if (this.pos == next) {
   	  	  this.tasks.shift();
   	  	  this.$emit('floorchange', this.pos, 0, this.id);
-  	  	  setTimeOut(this.move, 800);
+  	  	  setTimeout(this.move, 800);
   	  	} else if (this.pos > next) {
   	      this.dir = 2;
   	      this.pos--;
   	      this.$emit('floorchange', this.pos, 2, this.id);
-  	      setTimeOut(this.move, 100);
+  	      setTimeout(this.move, 200);
   	  	} else if (this.pos < next) {
   	  	  this.dir = 1;
   	  	  this.pos++;
   	  	  this.$emit('floorchange', this.pos, 1, this.id);
-  	  	  setTimeOut(this.move, 100);
+  	  	  setTimeout(this.move, 200);
   	  	}
   	  }
   	},
@@ -59,16 +57,17 @@
   	watch: {
   	//put new task into correct list position
   	//call move function when insert into empty tasks list
-  	  tmpTask (val) {
+  	  newtask (val) {
   	  	if (!val.d) {
   	  	  return;
   	  	}
   	  	let i = 0;
   	  	if (this.tasks.length == 0) {
   	  	  this.tasks.push(val);
+          let self = this;
   	  	  //asynchronic call move()
   	  	  var promise = new Promise(function(resolve, reject){
-	  	    this.move();
+	  	      self.move();
   	  	  });
   	  	  return;
   	  	}
@@ -115,5 +114,9 @@
   	width: 45px;
   	border: 1px solid steelblue;
   	transition: top .5s;
+    background-color: #aaa;
+    text-align: center;
+    font-size: 20px;
+    line-height: 32px;
   }
 </style>
