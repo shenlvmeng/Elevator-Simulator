@@ -95,7 +95,9 @@
   	  	  	  i++;
   	  	  	}
   	  	  	//avoid duplicated insertion
-  	  	  	if (this.tasks[i].t != val.t) {
+            if (i == this.tasks.length) {
+              this.tasks.splice(i, 0, val);
+            } else if (this.tasks[i].t != val.t) {
   	  	  	  this.tasks.splice(i, 0, val);
   	  	  	}
   	  	  	return;
