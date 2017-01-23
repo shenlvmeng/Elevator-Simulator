@@ -88,33 +88,35 @@
   	  	if (d1 == 0 || (d1 == 1 && p1 < dst) || (d1 == 2 && p1 > dst)) {
   	  	  if (d2 == 0 || (d2 == 1 && p2 < dst) || (d2 == 2 && p2 > dst)) {
   	  	  	if (Math.abs(p1 - dst) > Math.abs(p2 - dst)) {
-  	  	  	  this.newTasks[1] = {t: dst, d: d};
+  	  	  	  this.newTasks.splice(1, 1, {t: dst, d: d});
   	  	  	  return;
   	  	  	}
   	  	  }
-  	  	  this.newTasks[0] = {t: dst, d: d};
+  	  	  this.newTasks.splice(0, 1, {t: dst, d: d});
   	  	//different directions
   	  	} else {
   	  	  if ((d2 == 1 && p2 < dst) || (d2 == 2 && p2 > dst)) {
-  	  		this.newTasks[1] = {t: dst, d: d};
+  	  		this.newTasks.splice(1, 1, {t: dst, d: d});
   	  	  } else {
   	  		if (Math.abs(p1 - dst) > Math.abs(p2 - dst)) {
-  	  		  this.newTasks[1] = {t: dst, d: d};
+  	  		  this.newTasks.splice(1, 1, {t: dst, d: d});
   	  		} else {
-  	  		  this.newTasks[0] = {t: dst, d: d};
+  	  		  this.newTasks.splice(0, 1, {t: dst, d: d});
   	  		}
   	  	  }
   	  	}
   	  },
   	//update positions and directions together with uplist and downlist
   	  update (pos, dir, key) {
-  	  	this.positions[key] = pos;
-  	  	this.directions[key] = dir;
-        let p;
+        //Be careful !!! Use splice() instead of []
+        //or changes will not be detected
+  	  	this.positions.splice(key, 1, pos);
+  	  	this.directions.splice(key, 1, dir);
+        let p, self = this;
   	  	if (dir <= 1 && (p = this.upList.indexOf(pos), p != -1)) {
-  	  	  setTimeout(this.upList.splice(p, 1), 1300);
+  	  	  setTimeout(function(){self.upList.splice(p, 1);}, 1000);
   	  	} else if (dir != 1 && (p = this.downList.indexOf(pos), p != -1)) {
-  	  	  setTimeout(this.downList.splice(p, 1), 1300);
+  	  	  setTimeout(function(){self.downList.splice(p, 1);}, 1000);
   	  	}
   	  },
   	//update floor destination input from elevator panel

@@ -12,7 +12,7 @@
   	    <div class="circle" v-if="floor > 1" @click="down()"><div id="down-triangle" :class="{active: isDown && isPushable}"></div></div>
   	  </transition>
   	</aside>
-  	<DoorBody :isopen="pos == floor && (isUp || isDown)">
+  	<DoorBody :isopen="isOpen">
   </div>
 </template>
 
@@ -71,6 +71,9 @@
       },
       isDown () {
         return !(this.todown.indexOf(this.floor) == -1);
+      },
+      isOpen () {
+        return this.pos == this.floor && (this.isUp || this.isDown);
       }
   	},
   	components: {

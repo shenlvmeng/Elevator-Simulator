@@ -12,7 +12,7 @@
 
 <script>
   export default {
-  	name: 'door',
+  	name: 'doorbody',
   	props:{
   		isopen: {
   			required: true,
