@@ -1,5 +1,6 @@
 <template>
   <div id="app">
+    <p id="title">电梯模拟器</p>
     <span>这是一栋</span>
     <input type="text" ref="input" :value="floor" @input="update($event.target.value)" @keyup.enter="start()">
     <span>层的{{ title }}</span>
@@ -53,6 +54,11 @@ export default {
     margin-bottom: 0;
     font-size: 14px;
     color: #aaa;
+  }
+  p#title {
+    color: orange;
+    font-size: 28px;
+    line-height: 58px;
   }
   #app {
     display: table-cell;

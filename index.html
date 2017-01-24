@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Elevator Simulator</title>
+    <title>电梯模拟器</title>
     <style type="text/css">
       html, body{
       	margin: 0;
@@ -11,6 +11,9 @@
       }
       #wrapper{
       	min-width: 1080px;
+      }
+      #wrapper.content{
+        min-width: 675px;
       }
       .preface{
       	display: table;
@@ -24,12 +27,19 @@
         width: 100%;
         font-family: Helvetica, "Microsoft Yahei";
       }
+      .v-enter-active, .v-leave-active{
+        transition: opacity 1s ease;
+      }
+      .v-enter, .v-leave-active{
+        opacity: 0;
+      }
     </style>
   </head>
   <body>
     <div id="wrapper" :class="style">
-      <template v-if="preface === true"><Preface @start="change"></template>
-      <template v-else><Elevator :floor="floor"></template>
+      <transition mode="out-in">
+        <component :is="view" @start="change" :floor="floor"></component>
+      </transition>
     </div>
     <script src="/dist/build.js"></script>
   </body>

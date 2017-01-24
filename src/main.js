@@ -6,13 +6,13 @@ import Control from './Control.vue'
 new Vue({
   el: "#wrapper",
   data:{
-  	preface: true,
+  	view: 'Preface',
   	style: "preface",
     floor: 10
   },
   methods: {
   	change (floor) {
-  	  this.preface = false;
+  	  this.view = 'Elevator';
   	  this.style = 'content';
       this.floor = floor;
   	}

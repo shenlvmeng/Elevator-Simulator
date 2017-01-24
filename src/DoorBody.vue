@@ -35,7 +35,7 @@
   	opacity: 0;
   }
   svg#door{
-  	background-color: ivory;
+  	background-color: snow;
   	width: 100%;
   	height: 100%;
   }

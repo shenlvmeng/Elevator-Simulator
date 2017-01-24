@@ -1,6 +1,7 @@
 <template>
   <div id="door">
   	<p>
+      <span class="tag">电梯 {{id}}</span>
   	  <input type="number" :step="step" ref="input" :value="floor" @input="update($event.target.value)">
   	  <span>{{floorName}}</span>
   	</p>
@@ -30,8 +31,10 @@
   		  isPushable: this.pos != this.floor || (this.toup.length == 0 && this.todown.length == 0)
   	  }
   	},
-    //`pos`, `toup` and `todown` are calculated from list sended from Control component
-  	props: ['maxbuildingfloor', 'pos', 'toup', 'todown'],
+    //`pos` and `dir, are about info of this elevator, 
+    //`toup` and `todown` are calculated from list sended from Control component
+    //`id` is just used for display
+  	props: ['maxbuildingfloor', 'pos', 'dir', 'toup', 'todown', 'id'],
   	methods: {
   	  //People on the 'floor'th floor send up command
   	  up () {
@@ -73,7 +76,7 @@
         return !(this.todown.indexOf(this.floor) == -1);
       },
       isOpen () {
-        return this.pos == this.floor && (this.isUp || this.isDown);
+        return this.pos == this.floor && ((this.isUp && this.dir == 1) || (this.isDown && this.dir == 2));
       }
   	},
   	components: {
@@ -93,7 +96,7 @@
   	margin: 0;
   	color: #111;
   	text-align: center;
-  	font-family: Arial;
+  	font-family: Arial, Microsoft Yahei;
   	font-weight: bold;
   	font-size: 30px;
   	line-height: 80px;
@@ -104,6 +107,10 @@
   	font-family: Arial;
   	font-weight: bold;
   	max-width: 2em;
+  }
+  span.tag{
+    font-size: 22px;
+    margin-right: 20px;
   }
   input:focus{
   	outline: none;

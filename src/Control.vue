@@ -1,10 +1,10 @@
 <template>
   <div id="content">
-    <div v-for="i in [0,1]" class="door">
-      <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :toup="upList" :todown="downList" @up="up" @down="down">
-    </div>
     <div id="well" ref="well" :style="{height: height + 'px'}">
       <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :id="index" @floorchange="update">
+    </div>
+    <div v-for="i in [0,1]" class="door">
+      <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :dir="directions[i]" :toup="upList" :todown="downList" :id="i+1" @up="up" @down="down">
     </div>
     <div id="panel">
       <select @change="changeKey($event)"><option v-for="id in ids" :value="id">电梯 {{id}}</option></select>
@@ -55,6 +55,7 @@
       }
     },
     mounted () {
+      window.addEventListener('resize', this.adjustResize);
       this.$nextTick(function(){
         this.height = this.$el.clientHeight;
       });
@@ -114,9 +115,9 @@
   	  	this.directions.splice(key, 1, dir);
         let p, self = this;
   	  	if (dir <= 1 && (p = this.upList.indexOf(pos), p != -1)) {
-  	  	  setTimeout(function(){self.upList.splice(p, 1);}, 1000);
+  	  	  setTimeout(function(){self.upList.splice(p, 1);}, 1200);
   	  	} else if (dir != 1 && (p = this.downList.indexOf(pos), p != -1)) {
-  	  	  setTimeout(function(){self.downList.splice(p, 1);}, 1000);
+  	  	  setTimeout(function(){self.downList.splice(p, 1);}, 1200);
   	  	}
   	  },
   	//update floor destination input from elevator panel
@@ -135,7 +136,11 @@
   	  addDst () {
   	  	let n = {t: this.dstFloor, d: 0};
   	  	this.newTasks = n;
-  	  }
+  	  },
+    //adjust resize event of Window
+      adjustResize () {
+        this.height = this.$el.clientHeight;
+      }
   	},
   	components: {
   	  Door: Door,
@@ -159,7 +164,18 @@
   	padding: 0 2px;
   }
   #panel{
-  	position: absolute;
+  	position: fixed;
+    bottom: 20px;
+    height: 50px;
+    width: 357px;
+    padding-left: 50px;
+    background-color: #fff;
+    opacity: .8;
+  }
+  #panel select, #panel input{
+    margin-top: 10px;
+    font-size: 20px;
+    font-family: Microsoft Yahei, sans-serif;
   }
   div.door{
     display: inline-block;

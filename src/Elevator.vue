@@ -31,17 +31,17 @@
   	  	if (this.pos == next) {
   	  	  this.tasks.shift();
   	  	  this.$emit('floorchange', this.pos, 0, this.id);
-  	  	  setTimeout(this.move, 800);
+  	  	  setTimeout(this.move, 2000);
   	  	} else if (this.pos > next) {
   	      this.dir = 2;
   	      this.pos--;
   	      this.$emit('floorchange', this.pos, 2, this.id);
-  	      setTimeout(this.move, 200);
+  	      setTimeout(this.move, 800);
   	  	} else if (this.pos < next) {
   	  	  this.dir = 1;
   	  	  this.pos++;
   	  	  this.$emit('floorchange', this.pos, 1, this.id);
-  	  	  setTimeout(this.move, 200);
+  	  	  setTimeout(this.move, 800);
   	  	}
   	  }
   	},
@@ -115,7 +115,7 @@
   	position: absolute;
   	width: 45px;
   	border: 1px solid steelblue;
-  	transition: top .5s;
+  	transition: bottom 1s ease;
     background-color: #aaa;
     text-align: center;
     font-size: 20px;
