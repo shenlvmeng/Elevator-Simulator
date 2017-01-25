@@ -1,6 +1,8 @@
-# elevator
+# Elevator Simulator
 
 > A Vue.js project
+
+With basic functions.
 
 ## Build Setup
 

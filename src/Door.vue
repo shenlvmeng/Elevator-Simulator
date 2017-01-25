@@ -144,6 +144,7 @@
   	border: 1px solid #aaa;
   	border-radius: 15px;
   	background-color: #ccc;
+    cursor: pointer;
   }
   .circle:nth-child(2){
   	margin-top: 15px;

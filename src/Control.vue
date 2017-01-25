@@ -7,8 +7,11 @@
       <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :dir="directions[i]" :toup="upList" :todown="downList" :todst="dstList[i]" :id="i+1" @up="up" @down="down">
     </div>
     <div id="panel">
+      <p>下方为电梯操作界面</p>
+      <label>电梯序号：</label>
       <select @change="changeKey($event)"><option v-for="id in ids" :value="id">电梯 {{id + 1}}</option></select>
-  	  <input type="number" :step="step" ref="panelinput" :value="dstFloor" @input="updateFloor($event.target.value)" @keyup.enter="addDst">
+      <label for="dstfloor">下梯楼层：</label>
+  	  <input type="number" id="dstfloor" :step="step" ref="panelinput" :value="dstFloor" @input="updateFloor($event.target.value)" @keyup.enter="addDst">
     </div>
   </div>
 </template>
@@ -176,8 +179,8 @@
   }
   #panel{
   	position: fixed;
-    bottom: 20px;
-    height: 50px;
+    bottom: 30px;
+    height: 90px;
     width: 357px;
     padding-left: 50px;
     background-color: #fff;
@@ -187,6 +190,21 @@
     margin-top: 10px;
     font-size: 20px;
     font-family: Microsoft Yahei, sans-serif;
+  }
+  #panel p{
+    color: orange;
+    font-style: italic;
+    font-size: 14px;
+    line-height: 14px;
+  }
+  #panel input{
+    width: 3em;
+  }
+  label{
+    font-size: 18px;
+  }
+  label:nth-child(4){
+    margin-left: 10px;
   }
   div.door{
     display: inline-block;
