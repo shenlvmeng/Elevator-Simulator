@@ -2,7 +2,7 @@
 
 > A Vue.js project
 
-With basic functions.
+With basic functions. See also at this [link](http://shenlvmeng.github.io/elevator/index.html).
 
 ## Build Setup
 
