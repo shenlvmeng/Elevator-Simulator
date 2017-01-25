@@ -32,9 +32,9 @@
   	  }
   	},
     //`pos` and `dir, are about info of this elevator, 
-    //`toup` and `todown` are calculated from list sended from Control component
+    //`toup`, `todown` and `todst` are three different todo list sended from Control component
     //`id` is just used for display
-  	props: ['maxbuildingfloor', 'pos', 'dir', 'toup', 'todown', 'id'],
+  	props: ['maxbuildingfloor', 'pos', 'dir', 'toup', 'todown', 'todst', 'id'],
   	methods: {
   	  //People on the 'floor'th floor send up command
   	  up () {
@@ -70,13 +70,16 @@
   		return suffix + ' F';
   	  },
       isUp () {
-        return !(this.toup.indexOf(this.floor) == -1);
+        return this.toup.indexOf(this.floor) != -1;
       },
       isDown () {
-        return !(this.todown.indexOf(this.floor) == -1);
+        return this.todown.indexOf(this.floor) != -1;
+      },
+      isDst () {
+        return this.todst.indexOf(this.floor) != -1;
       },
       isOpen () {
-        return this.pos == this.floor && ((this.isUp && this.dir == 1) || (this.isDown && this.dir == 2));
+        return this.pos == this.floor && ((this.isUp && this.dir != 2) || (this.isDown && this.dir != 1) || this.isDst);
       }
   	},
   	components: {

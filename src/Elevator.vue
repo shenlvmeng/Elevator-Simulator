@@ -58,7 +58,8 @@
   	//put new task into correct list position
   	//call move function when insert into empty tasks list
   	  newtask (val) {
-  	  	if (!val.d) {
+        //exception: null or undefined conditions
+  	  	if (val.d == undefined) {
   	  	  return;
   	  	}
   	  	let i = 0;

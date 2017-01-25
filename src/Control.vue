@@ -4,10 +4,10 @@
       <Elevator v-for="(task, index) in newTasks" :newtask="task" :floors="maxFloor" :height="height" :id="index" @floorchange="update">
     </div>
     <div v-for="i in [0,1]" class="door">
-      <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :dir="directions[i]" :toup="upList" :todown="downList" :id="i+1" @up="up" @down="down">
+      <Door :maxbuildingfloor="maxFloor" :pos="positions[i]" :dir="directions[i]" :toup="upList" :todown="downList" :todst="dstList[i]" :id="i+1" @up="up" @down="down">
     </div>
     <div id="panel">
-      <select @change="changeKey($event)"><option v-for="id in ids" :value="id">电梯 {{id}}</option></select>
+      <select @change="changeKey($event)"><option v-for="id in ids" :value="id">电梯 {{id + 1}}</option></select>
   	  <input type="number" :step="step" ref="panelinput" :value="dstFloor" @input="updateFloor($event.target.value)" @keyup.enter="addDst">
     </div>
   </div>
@@ -43,6 +43,10 @@
     	  upList: [],
     	  //floor list waiting for down
     	  downList: [],
+        //store list of destination floors which comes from button input
+        //just for correct door-open behavior.
+        //Destination information is isolated between elevators
+        dstList: [[], []],
     	  //elevator new tasks
     	  newTasks: [{}, {}],
     	  //height of DOM div#well
@@ -114,11 +118,17 @@
   	  	this.positions.splice(key, 1, pos);
   	  	this.directions.splice(key, 1, dir);
         let p, self = this;
+        
   	  	if (dir <= 1 && (p = this.upList.indexOf(pos), p != -1)) {
-  	  	  setTimeout(function(){self.upList.splice(p, 1);}, 1200);
+  	  	  setTimeout(function(){ self.upList.splice(p, 1); }, 1000);
   	  	} else if (dir != 1 && (p = this.downList.indexOf(pos), p != -1)) {
-  	  	  setTimeout(function(){self.downList.splice(p, 1);}, 1200);
+  	  	  setTimeout(function(){ self.downList.splice(p, 1); }, 1000);
   	  	}
+        //No division between up/downList & dstList
+        //dstList also need checking
+        if (p = this.dstList[key].indexOf(pos), p != -1) {
+          setTimeout(function(){ self.dstList[key].splice(p, 1); }, 1000);
+        }
   	  },
   	//update floor destination input from elevator panel
   	  updateFloor (value) {
@@ -130,12 +140,13 @@
   	  },
   	//switch panel ownership
   	  changeKey (event) {
-  	  	this.activeID = event.target.value;
+  	  	this.activeID = parseInt(event.target.value);
   	  },
   	//add floor input from panel input
   	  addDst () {
+        this.dstList[this.activeID].push(this.dstFloor);
   	  	let n = {t: this.dstFloor, d: 0};
-  	  	this.newTasks = n;
+  	  	this.newTasks.splice(this.activeID, 1, n);
   	  },
     //adjust resize event of Window
       adjustResize () {
